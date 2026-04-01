@@ -1,0 +1,60 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow p-4">
+        <h2 class="text-center mb-4">Signup</h2>
+
+        <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+          <div class="mb-3">
+            <label>Username</label>
+            <input type="text" class="form-control" formControlName="username">
+            <small class="text-danger" *ngIf="signupForm.get('username')?.touched && signupForm.get('username')?.invalid">
+              Username must be at least 3 characters
+            </small>
+          </div>
+
+          <div class="mb-3">
+            <label>Email</label>
+            <input type="email" class="form-control" formControlName="email">
+            <small class="text-danger" *ngIf="signupForm.get('email')?.touched && signupForm.get('email')?.invalid">
+              Enter a valid email
+            </small>
+          </div>
+
+          <div class="mb-3">
+            <label>Password</label>
+            <input type="password" class="form-control" formControlName="password">
+            <small class="text-danger" *ngIf="signupForm.get('password')?.touched && signupForm.get('password')?.invalid">
+              Password must be at least 6 characters
+            </small>
+          </div>
+
+          <div class="mb-3">
+            <label>Confirm Password</label>
+            <input type="password" class="form-control" formControlName="confirmPassword">
+            <small class="text-danger" *ngIf="signupForm.get('confirmPassword')?.touched && signupForm.get('confirmPassword')?.invalid">
+              Confirm password is required
+            </small>
+          </div>
+
+          <div class="text-danger mb-3" *ngIf="errorMessage">
+            {{ errorMessage }}
+          </div>
+
+          <div class="text-success mb-3" *ngIf="successMessage">
+            {{ successMessage }}
+          </div>
+
+          <button class="btn btn-success w-100" [disabled]="loading">
+            {{ loading ? 'Creating account...' : 'Signup' }}
+          </button>
+
+          <p class="mt-3 text-center">
+            Already have an account?
+            <a routerLink="/login">Login</a>
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

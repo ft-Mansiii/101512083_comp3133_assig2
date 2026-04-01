@@ -1,0 +1,41 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Employee Details</h2>
+    <a routerLink="/employees" class="btn btn-outline-secondary">Back</a>
+  </div>
+
+  <div *ngIf="loading" class="alert alert-info">
+    Loading employee details...
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+
+  <div class="card shadow p-4" *ngIf="employee && !loading">
+    <div class="row align-items-center">
+      <div class="col-md-4 text-center mb-3 mb-md-0">
+        <img
+          [src]="employee.employee_photo || 'https://via.placeholder.com/150'"
+          (error)="handleImageError($event)"
+          alt="Employee Photo"
+          width="150"
+          height="150"
+          class="rounded-circle border"
+          style="object-fit: cover;"
+        >
+      </div>
+
+      <div class="col-md-8">
+        <h3 class="mb-3">{{ employee.first_name }} {{ employee.last_name }}</h3>
+
+        <p><strong>Email:</strong> {{ employee.email }}</p>
+        <p><strong>Gender:</strong> {{ employee.gender }}</p>
+        <p><strong>Designation:</strong> {{ employee.designation }}</p>
+        <p><strong>Department:</strong> {{ employee.department }}</p>
+        <p><strong>Salary:</strong> {{ employee.salary }}</p>
+        <p><strong>Date of Joining:</strong> {{ employee.date_of_joining | date }}</p>
+      </div>
+    </div>
+  </div>
+</div>
