@@ -6,10 +6,7 @@
 }
 
 .container {
-  min-height: calc(100vh - 80px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  max-width: 1200px;
 }
 
 .card {
@@ -33,6 +30,7 @@ label {
 }
 
 .form-control {
+  width: 100%;
   border-radius: 14px;
   border: 1px solid #dbe4f0;
   padding: 12px 14px;
@@ -46,6 +44,7 @@ label {
 }
 
 .btn-success {
+  width: 100%;
   border: none;
   border-radius: 14px;
   padding: 12px;
@@ -72,4 +71,10 @@ a {
 
 a:hover {
   text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .card {
+    border-radius: 18px;
+  }
 }
