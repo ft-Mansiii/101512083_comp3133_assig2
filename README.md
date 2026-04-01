@@ -1,153 +1,203 @@
-🚀 Employee Management System (COMP 3133 Assignment 2)
-👤 Student Information
-Name: Mansi 
-Student ID: 101512083
-Course: COMP 3133 – Full Stack Development II
-📌 Project Overview
+# COMP3133 – Assignment 1 (Employee Management System) – GraphQL API  
+**Student Name:** Mansi  
+**Student ID:** 101512083  
 
-This is a full-stack Employee Management System built using:
+Backend application built using **Node.js, Express, GraphQL, MongoDB (Mongoose)** with optional **JWT auth** and **Cloudinary** employee photo upload.
 
-Frontend: Angular
-Backend: Node.js + Express + GraphQL
-Database: MongoDB Atlas
-Deployment:
-Frontend → Vercel
-Backend → Render
+---
 
-The application allows users to manage employees with full CRUD functionality and authentication.
+## Tech Stack
+- Node.js + Express
+- GraphQL (single endpoint)
+- MongoDB Atlas + Mongoose
+- JWT Authentication (Bearer token)
+- Cloudinary (employee photo storage)
+- express-validator (basic request validation)
 
-🛠️ Technologies Used
-Frontend
-Angular 21
-Apollo Angular (GraphQL Client)
-Bootstrap 5
-TypeScript
-Backend
-Node.js
-Express.js
-GraphQL (Apollo Server)
-JWT Authentication
-Database
-MongoDB Atlas
-Mongoose
-Other Tools
-Postman (API testing)
-GitHub (version control)
-Cloudinary (image upload)
-🔐 Features
-Authentication
-User Registration
-User Login
-JWT Token-based Authentication
-Protected Routes
-Employee Management
-➕ Add Employee
-📄 View All Employees
-🔍 View Employee by ID
-✏️ Update Employee
-❌ Delete Employee
-Search & Filtering
-Search employees by:
-Designation
-Department
-Image Upload
-Upload employee profile images using Cloudinary
-⚙️ Installation & Setup
-1️⃣ Clone the Repository
-git clone https://github.com/SaKsHaTGaRg/101516778_COMP3133_assig2.git
-cd 101516778_COMP3133_assig2
-2️⃣ Backend Setup
-cd backend
+---
+
+## Features Implemented (Required APIs)
+
+### Auth
+- **Signup (Mutation)** → create user account (password stored encrypted)
+- **Login (Query)** → login with username OR email + password, returns JWT
+
+### Employees (JWT Protected)
+- **Get All Employees (Query)**
+- **Add New Employee (Mutation)**  
+  - Supports employee photo upload to Cloudinary (base64 data URI)
+- **Search Employee by eid (Query)**
+- **Search by designation OR department (Query)**
+- **Update Employee by eid (Mutation)**
+- **Delete Employee by eid (Mutation)**
+
+---
+
+## Project Setup
+
+### 1) Install Dependencies
+```bash
 npm install
 
-Create .env file:
 
+2) Create .env file (root folder)
 PORT=3000
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_secret_key
+MONGO_URI=mongodb+srv://<user>:<pass>@<cluster>/<dbName>?appName=<appName>
+
+JWT_SECRET=comp3133_secret_key
 JWT_EXPIRES_IN=1d
 
-CLOUDINARY_CLOUD_NAME=your_cloud_name
-CLOUDINARY_API_KEY=your_api_key
-CLOUDINARY_API_SECRET=your_api_secret
+CLOUDINARY_CLOUD_NAME=xxxx
+CLOUDINARY_API_KEY=xxxx
+CLOUDINARY_API_SECRET=xxxx
 
-Run backend:
+3) Start the Server
+npm run dev
 
-npm start
-3️⃣ Frontend Setup
-cd frontend
-npm install
-ng serve
+
+Server runs at:
+
+http://localhost:3000/graphql
+
+How Authentication Works (JWT)
+
+After login, copy the token and send it in request headers:
+
+Header
+
+{
+  "Authorization": "Bearer YOUR_TOKEN_HERE"
+}
+
+
+All employee operations require this token.
+
+Cloudinary Photo Upload (Employee Photo)
+
+Field: employee_photo
+
+Supported values:
+
+Base64 Data URI (uploads to Cloudinary automatically)
+
+Example starts with: data:image/png;base64,...
+
+Existing URL string
+
+If you pass a normal URL, it is stored as-is.
+
+Uploads go to folder:
+
+comp3133_employees
+
+✅ You do NOT need to manually create this folder in Cloudinary.
+Cloudinary creates it automatically after first upload.
+
+GraphQL Testing
+Option A: Postman
+
+Method: POST
+
+URL: http://localhost:3000/graphql
+
+Body → raw → JSON:
+
+{
+  "query": "YOUR_QUERY_HERE",
+  "variables": {}
+}
+
+Option B: GraphiQL / Playground (if enabled)
 
 Open:
 
-http://localhost:4200
-🔗 API (GraphQL)
-Endpoint:
 http://localhost:3000/graphql
-Sample Queries
-Get Employees
-query {
-  getEmployees {
-    _id
-    first_name
-    last_name
-    email
-    designation
-    department
+
+Sample Queries / Mutations
+1) Signup (Mutation)
+{
+  "query": "mutation($input: SignupInput!){ signup(input:$input){ success message token user{_id username email} } }",
+  "variables": {
+    "input": {
+      "username": "mansi_user",
+      "email": "mansi_user@gmail.com",
+      "password": "password123"
+    }
   }
 }
-Add Employee
-mutation {
-  addEmployee(input: {
-    first_name: "John",
-    last_name: "Doe",
-    email: "john@example.com",
-    designation: "Developer",
-    department: "IT"
-  }) {
-    _id
-    first_name
+
+2) Login (Query)
+{
+  "query": "query($input: LoginInput!){ login(input:$input){ success message token user{_id username email} } }",
+  "variables": {
+    "input": {
+      "usernameOrEmail": "mansi_user",
+      "password": "password123"
+    }
   }
 }
-📁 Project Structure
-/backend
-  ├── models
-  ├── resolvers
-  ├── schema
-  ├── middleware
-  └── server.js
 
-/frontend
-  ├── src/app
-  │    ├── components
-  │    ├── services
-  │    └── graphql
-  └── angular.json
-🚀 Deployment
-Backend (Render)
-Connected GitHub repo
-Start command:
-node server.js
-Frontend (Vercel)
-Root Directory: frontend
-Build Command:
-npm run build
-Output Directory:
-dist/frontend/browser
-🧪 Testing
-Backend tested using Postman & GraphQL Playground
-Frontend tested via browser UI
-All CRUD operations verified
-⚠️ Notes
-CORS enabled for frontend deployment
-JWT stored in browser (localStorage)
-No persistent sessions required
-📸 Screenshots (Include in submission)
-MongoDB Atlas collections
-GraphQL queries & mutations
-Angular UI (all features)
-Login / Register pages
-Search functionality
+3) Add Employee (Mutation)
+{
+  "query": "mutation($input: EmployeeInput!){ addEmployee(input:$input){ success message employee{_id first_name last_name email designation department salary date_of_joining employee_photo} } }",
+  "variables": {
+    "input": {
+      "first_name": "User2",
+      "last_name": "Dev",
+      "email": "user2.dev@gmail.com",
+      "gender": "Male",
+      "designation": "Developer",
+      "salary": 4500,
+      "date_of_joining": "2024-01-01",
+      "department": "IT",
+      "employee_photo": "data:image/png;base64,PUT_BASE64_HERE"
+    }
+  }
+}
 
-This project demonstrates a complete full-stack application using modern technologies including Angular, GraphQL, and MongoDB, with deployment on cloud platforms.
+4) Get All Employees (Query)
+{
+  "query": "query{ getAllEmployees{ success message employees{ _id first_name last_name email designation department } } }"
+}
+
+5) Search Employee by eid (Query)
+{
+  "query": "query($eid: ID!){ searchEmployeeByEid(eid:$eid){ success message employee{ _id first_name last_name email } } }",
+  "variables": { "eid": "PUT_EMPLOYEE_ID_HERE" }
+}
+
+6) Search by designation or department (Query)
+{
+  "query": "query($designation:String,$department:String){ searchEmployeeByDesignationOrDepartment(designation:$designation, department:$department){ success message employees{ _id first_name designation department } } }",
+  "variables": { "department": "IT" }
+}
+
+7) Update Employee by eid (Mutation)
+{
+  "query": "mutation($eid: ID!, $input: EmployeeUpdateInput!){ updateEmployeeByEid(eid:$eid, input:$input){ success message employee{ _id first_name last_name salary department } } }",
+  "variables": {
+    "eid": "PUT_EMPLOYEE_ID_HERE",
+    "input": {
+      "salary": 6000,
+      "department": "Engineering"
+    }
+  }
+}
+
+8) Delete Employee by eid (Mutation)
+{
+  "query": "mutation($eid: ID!){ deleteEmployeeByEid(eid:$eid){ success message employee{ _id email } } }",
+  "variables": { "eid": "PUT_EMPLOYEE_ID_HERE" }
+}
+
+Validation & Error Handling
+
+Required fields checked for employee creation
+
+Salary must be >= 1000
+
+Gender must be: Male | Female | Other
+
+Duplicate emails rejected (MongoDB unique constraint)
+
+JWT required for employee APIs
